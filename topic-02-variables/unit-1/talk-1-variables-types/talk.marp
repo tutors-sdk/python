@@ -1,0 +1,317 @@
+---
+marp: true
+theme: default
+paginate: true
+---
+
+# Variables and Data Types
+
+### Understanding how Python stores and types data
+
+Every program needs to store data. Variables give names to your data so you can use it throughout your code.
+
+---
+
+## What is a Variable?
+
+A variable is a **named reference** to a value stored in memory.
+
+```python
+# Creating variables with the assignment operator =
+name = "Alice"
+age = 25
+temperature = 98.6
+is_student = True
+```
+
+Think of variables as **labeled boxes** that hold values:
+
+| Variable | Value | Type |
+|----------|-------|------|
+| `name` | `"Alice"` | str |
+| `age` | `25` | int |
+| `temperature` | `98.6` | float |
+| `is_student` | `True` | bool |
+
+Variables can be **reassigned** at any time -- Python is dynamically typed.
+
+---
+
+## Naming Rules
+
+### Valid Variable Names
+```python
+my_variable = 1      # snake_case (recommended!)
+myVariable = 2       # camelCase (legal but not Pythonic)
+_private = 3         # leading underscore (convention for private)
+MAX_SIZE = 100       # ALL_CAPS (convention for constants)
+name2 = "Bob"        # can contain digits (not at start)
+```
+
+### Invalid Variable Names
+```python
+2name = "error"      # cannot start with a digit
+my-var = "error"     # hyphens not allowed
+class = "error"      # reserved keyword
+my var = "error"     # spaces not allowed
+```
+
+### Python Reserved Words (35 total)
+`False`, `True`, `None`, `and`, `or`, `not`, `if`, `else`, `elif`, `for`, `while`, `break`, `continue`, `def`, `class`, `return`, `import`, `from`, `try`, `except`, ...
+
+---
+
+## Integers (`int`)
+
+Integers are **whole numbers** -- positive, negative, or zero.
+
+```python
+count = 42
+negative = -17
+zero = 0
+big_number = 1_000_000  # underscores for readability
+```
+
+### Arbitrary Precision
+Python integers have **no size limit** -- they can be as large as your memory allows:
+
+```python
+huge = 10 ** 100  # a googol!
+print(huge)
+# 10000000000000000000000000000000000000000000000000000
+# 00000000000000000000000000000000000000000000000000
+```
+
+### Integer Operations
+```python
+print(17 // 5)   # 3  (floor division)
+print(17 % 5)    # 2  (modulo/remainder)
+print(2 ** 10)   # 1024 (exponentiation)
+```
+
+---
+
+## Floating Point (`float`)
+
+Floats represent **decimal numbers** using IEEE 754 double precision.
+
+```python
+pi = 3.14159
+price = 19.99
+scientific = 2.5e6   # 2,500,000.0
+tiny = 1.5e-10       # 0.00000000015
+```
+
+### Precision Gotcha!
+```python
+>>> 0.1 + 0.2
+0.30000000000000004   # NOT exactly 0.3!
+```
+
+This is **not a Python bug** -- it is how all computers store decimals in binary.
+
+**Solution**: Use `round()` or the `decimal` module for exact arithmetic:
+```python
+from decimal import Decimal
+print(Decimal("0.1") + Decimal("0.2"))  # 0.3
+```
+
+---
+
+## Strings (`str`)
+
+Strings are **sequences of characters**, enclosed in quotes.
+
+```python
+single = 'Hello'
+double = "World"
+triple = """This string
+spans multiple lines"""
+
+# Escape characters
+tab = "Column1\tColumn2"
+newline = "Line1\nLine2"
+quote = "She said \"hello\""
+
+# Raw strings (ignore escapes)
+path = r"C:\Users\Alice\Documents"
+```
+
+### Useful String Operations
+```python
+greeting = "Hello, World!"
+print(len(greeting))       # 13
+print(greeting[0])         # 'H'
+print(greeting[-1])        # '!'
+print(greeting[0:5])       # 'Hello'
+print(greeting.upper())    # 'HELLO, WORLD!'
+```
+
+---
+
+## Booleans (`bool`)
+
+Booleans represent **truth values**: `True` or `False`.
+
+```python
+is_active = True
+is_deleted = False
+
+# Comparison results are booleans
+print(5 > 3)      # True
+print(10 == 20)    # False
+```
+
+### Truthy and Falsy Values
+In Python, many values can be treated as booleans:
+
+| Falsy | Truthy |
+|-------|--------|
+| `False` | `True` |
+| `0`, `0.0` | Any non-zero number |
+| `""` (empty string) | Any non-empty string |
+| `[]`, `()`, `{}` | Any non-empty collection |
+| `None` | Everything else |
+
+```python
+print(bool(0))       # False
+print(bool(42))      # True
+print(bool(""))      # False
+print(bool("hello")) # True
+```
+
+---
+
+## None Type
+
+`None` represents the **absence of a value**. It is Python's version of null.
+
+```python
+result = None
+
+# Check with 'is' (not ==)
+if result is None:
+    print("No result yet")
+
+# Functions without a return statement return None
+def greet(name):
+    print(f"Hello, {name}")
+
+x = greet("Alice")   # prints "Hello, Alice"
+print(x)             # None
+```
+
+### Common Uses of None
+- Default function parameter values
+- Initializing a variable before assignment
+- Indicating "no result" or "not found"
+
+---
+
+## Type Checking
+
+Use `type()` and `isinstance()` to inspect types at runtime.
+
+```python
+x = 42
+print(type(x))              # <class 'int'>
+print(type(x).__name__)     # 'int'
+print(isinstance(x, int))   # True
+
+# isinstance() can check multiple types
+value = 3.14
+print(isinstance(value, (int, float)))  # True
+```
+
+### type() vs isinstance()
+
+```python
+# isinstance() respects inheritance
+print(isinstance(True, int))   # True! (bool is a subclass of int)
+print(type(True) == int)       # False (type() is exact match only)
+```
+
+> **Best practice**: Use `isinstance()` in most cases -- it handles inheritance correctly.
+
+---
+
+## Type Conversion
+
+Convert between types using built-in functions:
+
+```python
+# String to Integer
+age = int("25")          # 25
+# int("hello")           # ValueError!
+
+# String to Float
+price = float("19.99")   # 19.99
+
+# Number to String
+text = str(42)            # "42"
+text = str(3.14)          # "3.14"
+
+# To Boolean
+bool(1)       # True
+bool(0)       # False
+bool("text")  # True
+bool("")      # False
+
+# Float to Integer (truncates, does not round!)
+int(3.9)      # 3
+int(-3.9)     # -3
+
+# Use round() for rounding
+round(3.9)    # 4
+```
+
+---
+
+## f-strings (Formatted String Literals)
+
+f-strings are the modern way to embed expressions inside strings (Python 3.6+).
+
+```python
+name = "Alice"
+age = 25
+
+# Basic f-string
+print(f"Hello, {name}! You are {age} years old.")
+
+# Expressions inside braces
+print(f"Next year you will be {age + 1}.")
+
+# Formatting numbers
+pi = 3.14159265
+print(f"Pi is approximately {pi:.2f}")    # "Pi is approximately 3.14"
+
+price = 1234.5
+print(f"Price: ${price:,.2f}")            # "Price: $1,234.50"
+
+# Alignment and padding
+for item in ["Apple", "Banana", "Cherry"]:
+    print(f"{item:<10} | in stock")
+# Apple      | in stock
+# Banana     | in stock
+# Cherry     | in stock
+```
+
+---
+
+## Key Takeaways
+
+| Type | Example | Mutable? | Notes |
+|------|---------|----------|-------|
+| `int` | `42` | No | Arbitrary precision |
+| `float` | `3.14` | No | IEEE 754 double |
+| `str` | `"hello"` | No | Immutable sequence |
+| `bool` | `True` | No | Subclass of int |
+| `NoneType` | `None` | No | Singleton |
+
+### Rules of Thumb
+1. Use **snake_case** for variable names
+2. Use **UPPER_CASE** for constants
+3. Check types with **isinstance()**, not `type()`
+4. Use **f-strings** for formatting (Python 3.6+)
+5. Be aware of **float precision** issues
+6. Check for None with **`is None`**, not `== None`

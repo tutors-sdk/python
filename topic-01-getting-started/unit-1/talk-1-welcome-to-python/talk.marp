@@ -1,0 +1,222 @@
+---
+marp: true
+theme: default
+paginate: true
+---
+
+# Welcome to Python
+
+### Your journey into programming begins
+
+Python is the world's most popular programming language for beginners and professionals alike.
+
+Let's discover why!
+
+---
+
+## What is Python?
+
+Python is a **high-level**, **interpreted**, **dynamically typed** programming language.
+
+- Created by **Guido van Rossum** and first released in **1991**
+- Named after Monty Python's Flying Circus (not the snake!)
+- Emphasizes **code readability** and simplicity
+
+```python
+# Python reads almost like English
+if temperature > 30:
+    print("It's a hot day!")
+```
+
+> "There should be one -- and preferably only one -- obvious way to do it." - The Zen of Python
+
+---
+
+## Why Python?
+
+### Readability
+Python uses indentation instead of braces, forcing clean code:
+```python
+def greet(name):
+    return f"Hello, {name}!"
+```
+
+### Versatility
+Web development, data science, AI, automation, scripting, and more.
+
+### Huge Ecosystem
+Over **400,000 packages** on PyPI (Python Package Index).
+
+### Beginner-Friendly
+Minimal boilerplate. Your first program is just one line:
+```python
+print("Hello, World!")
+```
+
+---
+
+## Python's History
+
+| Year | Milestone |
+|------|-----------|
+| 1991 | Python 0.9.0 released by Guido van Rossum |
+| 2000 | Python 2.0 - list comprehensions, garbage collection |
+| 2008 | Python 3.0 - major redesign (not backward-compatible) |
+| 2020 | Python 2 officially retired (EOL: Jan 1, 2020) |
+| 2024 | Python 3.12+ - faster, better error messages |
+
+### Python 2 vs Python 3
+- Python 2 is **dead** -- do not use it
+- Always use **Python 3.10+** for new projects
+- Current stable: **Python 3.12**
+
+```python
+# Python 2 (DON'T use)       # Python 3 (DO use)
+print "Hello"                 # print("Hello")
+```
+
+---
+
+## Installing Python
+
+### Download from python.org
+
+1. Visit [python.org/downloads](https://python.org/downloads)
+2. Download the latest **Python 3.12+** installer
+3. **Windows**: Check "Add Python to PATH" during install!
+4. **macOS**: Use the official installer or `brew install python3`
+5. **Linux**: Usually pre-installed; or `sudo apt install python3`
+
+### Verify Your Installation
+
+```bash
+python --version
+# Python 3.12.4
+
+python3 --version   # on macOS/Linux
+# Python 3.12.4
+```
+
+> **Tip**: On Windows, you might need to use `python` while on macOS/Linux you might use `python3`.
+
+---
+
+## The Python REPL
+
+The **REPL** (Read-Eval-Print Loop) is Python's interactive shell.
+
+```bash
+$ python
+Python 3.12.4 (main, Jun  2 2024, 00:00:00)
+>>> 2 + 3
+5
+>>> "Hello" + " " + "World"
+'Hello World'
+>>> len("Python")
+6
+>>> exit()
+```
+
+### Why Use the REPL?
+- **Quick experiments** -- test ideas without creating files
+- **Explore APIs** -- use `help()` and `dir()` to discover functions
+- **Debug** -- test small snippets in isolation
+
+```python
+>>> help(print)    # Get help on any function
+>>> dir(str)       # List all string methods
+```
+
+---
+
+## Your First Script
+
+Create a file called `hello.py`:
+
+```python
+# hello.py - My first Python program
+print("Hello, World!")
+print("Welcome to Python programming!")
+```
+
+### Running Your Script
+
+```bash
+$ python hello.py
+Hello, World!
+Welcome to Python programming!
+```
+
+### The `print()` Function
+- Outputs text to the console
+- Accepts multiple arguments separated by commas
+- Adds a newline at the end by default
+
+```python
+print("Name:", "Alice", "Age:", 25)
+# Output: Name: Alice Age: 25
+```
+
+---
+
+## Python IDEs & Tools
+
+| Tool | Best For | Cost |
+|------|----------|------|
+| **VS Code** | General development, extensions | Free |
+| **PyCharm** | Professional Python development | Free / Paid |
+| **Jupyter Notebook** | Data science, interactive coding | Free |
+| **IDLE** | Quick scripts, comes with Python | Free |
+
+### Recommended Setup for This Course:
+1. **VS Code** with the Python extension
+2. Or **Jupyter Notebooks** for interactive exercises
+
+```bash
+# Install VS Code Python extension
+code --install-extension ms-python.python
+
+# Or install Jupyter
+pip install jupyter
+jupyter notebook
+```
+
+---
+
+## Course Roadmap
+
+We will cover **10 topics** in this course:
+
+1. **Getting Started** -- installing Python, first program (this topic!)
+2. **Variables & Data Types** -- storing and typing data
+3. **Operators & Expressions** -- arithmetic, logic, comparisons
+4. **Control Flow** -- if/elif/else, decision making
+5. **Loops** -- for, while, iteration patterns
+6. **Functions** -- defining, calling, parameters, returns
+7. **Data Structures** -- lists, tuples, dicts, sets
+8. **File I/O** -- reading, writing, CSV, JSON
+9. **Error Handling** -- try/except, custom exceptions
+10. **Modules & Packages** -- imports, pip, virtual environments
+
+Each topic includes **slides**, **interactive notebooks**, and **hands-on labs**.
+
+---
+
+## Let's Get Started!
+
+You are about to learn one of the most **powerful** and **in-demand** programming languages in the world.
+
+### What's Next?
+- Open the **interactive notebook** to write your first Python code
+- Read the **Python Ecosystem Overview** note
+- Don't be afraid to **experiment** -- you can't break anything!
+
+### Remember:
+> "The best way to learn programming is by programming." -- every programmer ever
+
+```python
+print("Let's begin!")
+# Output: Let's begin!
+```
+
+**Happy coding!** 🐍

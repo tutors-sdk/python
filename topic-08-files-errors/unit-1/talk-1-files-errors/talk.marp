@@ -1,0 +1,281 @@
+---
+marp: true
+theme: default
+paginate: true
+---
+
+# File I/O and Error Handling
+
+### Reading, writing, and recovering gracefully
+
+---
+
+## Opening Files
+
+Python uses the built-in `open()` function:
+
+```python
+# Syntax: open(filename, mode)
+f = open("data.txt", "r")   # read (default)
+f = open("data.txt", "w")   # write (truncates)
+f = open("data.txt", "a")   # append
+f = open("data.txt", "x")   # exclusive create
+f = open("image.png", "rb") # read binary
+```
+
+| Mode | Description |
+|------|-------------|
+| `r` | Read (default) |
+| `w` | Write (creates/truncates) |
+| `a` | Append |
+| `x` | Create (fails if exists) |
+| `b` | Binary mode (add to other modes) |
+
+---
+
+## Reading Files
+
+```python
+f = open("data.txt", "r")
+
+content = f.read()          # entire file as string
+line = f.readline()         # one line at a time
+lines = f.readlines()       # list of all lines
+
+# Iterate line by line (memory-efficient)
+for line in f:
+    print(line.strip())
+
+f.close()  # Always close when done!
+```
+
+---
+
+## The `with` Statement
+
+Context managers automatically close files -- even if an error occurs:
+
+```python
+# Recommended approach
+with open("data.txt", "r") as f:
+    content = f.read()
+    print(content)
+# f is automatically closed here
+
+# Without 'with' you risk forgetting to close:
+f = open("data.txt")
+# ... if an error occurs here, f never gets closed!
+f.close()
+```
+
+**Always use `with` for file operations.**
+
+---
+
+## Writing Files
+
+```python
+# Write a string
+with open("output.txt", "w") as f:
+    f.write("Hello, World!\n")
+    f.write("Second line\n")
+
+# Write multiple lines
+lines = ["Line 1\n", "Line 2\n", "Line 3\n"]
+with open("output.txt", "w") as f:
+    f.writelines(lines)
+
+# Append to existing file
+with open("log.txt", "a") as f:
+    f.write("New log entry\n")
+```
+
+---
+
+## Working with Paths
+
+The `pathlib` module provides an object-oriented approach:
+
+```python
+from pathlib import Path
+
+# Create path objects
+p = Path("data") / "files" / "report.txt"
+home = Path.home()
+cwd = Path.cwd()
+
+# Useful properties
+print(p.name)      # "report.txt"
+print(p.stem)      # "report"
+print(p.suffix)    # ".txt"
+print(p.parent)    # data/files
+print(p.exists())  # True or False
+
+# Read/write shortcuts
+text = p.read_text()
+p.write_text("new content")
+```
+
+---
+
+## CSV and JSON
+
+```python
+import csv
+
+# Reading CSV
+with open("data.csv") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        print(row["name"], row["score"])
+
+# Writing CSV
+with open("output.csv", "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerow(["name", "score"])
+    writer.writerow(["Alice", 95])
+```
+
+```python
+import json
+
+# Read JSON
+with open("config.json") as f:
+    data = json.load(f)
+
+# Write JSON
+with open("config.json", "w") as f:
+    json.dump(data, f, indent=2)
+```
+
+---
+
+## What Are Exceptions?
+
+Exceptions are errors detected during execution:
+
+```python
+# These all raise exceptions:
+int("hello")        # ValueError
+1 / 0               # ZeroDivisionError
+my_list[99]         # IndexError
+my_dict["missing"]  # KeyError
+open("nope.txt")    # FileNotFoundError
+```
+
+When an exception occurs, Python stops execution and looks for a handler. If none is found, the program crashes with a traceback.
+
+---
+
+## try / except
+
+Catch and handle exceptions:
+
+```python
+try:
+    number = int(input("Enter a number: "))
+    result = 100 / number
+    print(f"Result: {result}")
+except ValueError:
+    print("That's not a valid number!")
+except ZeroDivisionError:
+    print("Cannot divide by zero!")
+```
+
+```python
+# Catch multiple exceptions together
+try:
+    value = my_dict[key]
+except (KeyError, TypeError) as e:
+    print(f"Error accessing data: {e}")
+```
+
+---
+
+## try / except / else / finally
+
+```python
+try:
+    f = open("data.txt")
+    content = f.read()
+except FileNotFoundError:
+    print("File not found!")
+    content = ""
+else:
+    # Runs ONLY if no exception occurred
+    print(f"Read {len(content)} characters")
+finally:
+    # ALWAYS runs, exception or not
+    print("Operation complete")
+```
+
+- **try**: Code that might raise an exception
+- **except**: Handle specific exceptions
+- **else**: Runs if try succeeded (no exception)
+- **finally**: Cleanup code, always runs
+
+---
+
+## Raising Exceptions
+
+```python
+def set_age(age):
+    if not isinstance(age, int):
+        raise TypeError("Age must be an integer")
+    if age < 0 or age > 150:
+        raise ValueError(f"Invalid age: {age}")
+    return age
+
+# Custom exception classes
+class InsufficientFundsError(Exception):
+    def __init__(self, balance, amount):
+        self.balance = balance
+        self.amount = amount
+        super().__init__(
+            f"Cannot withdraw {amount}: balance is {balance}"
+        )
+
+raise InsufficientFundsError(50, 100)
+```
+
+---
+
+## Common Exceptions
+
+| Exception | When It Occurs |
+|-----------|---------------|
+| `ValueError` | Wrong value (e.g., `int("abc")`) |
+| `TypeError` | Wrong type (e.g., `"a" + 1`) |
+| `KeyError` | Missing dictionary key |
+| `IndexError` | List index out of range |
+| `FileNotFoundError` | File does not exist |
+| `AttributeError` | Object has no such attribute |
+| `ZeroDivisionError` | Division by zero |
+| `ImportError` | Module not found |
+| `RuntimeError` | Generic runtime error |
+
+---
+
+## Best Practices: EAFP vs LBYL
+
+**LBYL** -- Look Before You Leap:
+```python
+if key in my_dict:
+    value = my_dict[key]
+else:
+    value = default
+```
+
+**EAFP** -- Easier to Ask Forgiveness than Permission (**Pythonic**):
+```python
+try:
+    value = my_dict[key]
+except KeyError:
+    value = default
+```
+
+- Python favors EAFP style
+- Be specific with exception types -- never use bare `except:`
+- Use `with` for resources (files, connections)
+- Log exceptions for debugging
+- Fail fast: let unexpected errors propagate

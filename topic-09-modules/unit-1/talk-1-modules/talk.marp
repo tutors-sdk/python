@@ -1,0 +1,267 @@
+---
+marp: true
+theme: default
+paginate: true
+---
+
+# Modules and Packages
+
+### Organizing and reusing Python code
+
+---
+
+## What Is a Module?
+
+A **module** is simply a Python file (`.py`) containing definitions and statements.
+
+```python
+# mymath.py  <-- this is a module!
+def add(a, b):
+    return a + b
+
+def multiply(a, b):
+    return a * b
+
+PI = 3.14159
+```
+
+**Why modules?**
+- Organize code into logical files
+- Reuse code across projects
+- Avoid naming conflicts via namespaces
+- Make programs easier to maintain
+
+---
+
+## Importing Modules
+
+```python
+# Import the entire module
+import math
+print(math.sqrt(16))      # 4.0
+
+# Import specific items
+from math import pi, sqrt
+print(pi)                  # 3.141592653589793
+
+# Import with alias
+import numpy as np
+data = np.array([1, 2, 3])
+
+# Import all (avoid in production code!)
+from math import *
+```
+
+**Best practice:** Use explicit imports so readers know where names come from.
+
+---
+
+## The Standard Library
+
+Python's "batteries included" philosophy means a rich standard library:
+
+| Category | Modules |
+|----------|---------|
+| Math | `math`, `statistics`, `decimal`, `fractions` |
+| Text | `string`, `re`, `textwrap` |
+| Files | `os`, `pathlib`, `shutil`, `glob` |
+| Data | `json`, `csv`, `sqlite3` |
+| Date/Time | `datetime`, `time`, `calendar` |
+| Collections | `collections`, `itertools`, `functools` |
+| System | `sys`, `os`, `subprocess`, `argparse` |
+| Testing | `unittest`, `doctest` |
+
+---
+
+## Key Standard Library Modules
+
+```python
+import os
+print(os.getcwd())              # current directory
+print(os.listdir("."))           # list files
+
+import sys
+print(sys.version)               # Python version
+print(sys.path)                  # module search paths
+
+import math
+print(math.factorial(5))         # 120
+
+import random
+print(random.randint(1, 100))    # random integer
+
+from datetime import datetime
+print(datetime.now())            # current date/time
+
+from collections import Counter
+print(Counter("mississippi"))    # letter counts
+```
+
+---
+
+## Creating Your Own Module
+
+```python
+# utils.py
+def greet(name):
+    return f"Hello, {name}!"
+
+def calculate_area(radius):
+    import math
+    return math.pi * radius ** 2
+
+VERSION = "1.0.0"
+```
+
+```python
+# main.py
+import utils
+
+print(utils.greet("Alice"))
+print(utils.calculate_area(5))
+print(utils.VERSION)
+```
+
+Any `.py` file can be imported as a module. Python will execute all top-level code in the module when it is first imported.
+
+---
+
+## Packages
+
+A **package** is a directory containing modules and a special `__init__.py` file:
+
+```
+mypackage/
+    __init__.py          # makes it a package
+    module_a.py
+    module_b.py
+    subpackage/
+        __init__.py
+        module_c.py
+```
+
+```python
+# Importing from packages
+from mypackage import module_a
+from mypackage.subpackage import module_c
+from mypackage.module_b import some_function
+```
+
+**Note:** In Python 3.3+, `__init__.py` is optional (namespace packages), but it is still recommended for clarity.
+
+---
+
+## `if __name__ == "__main__"`
+
+This idiom lets a module work both as a script and as an importable module:
+
+```python
+# converter.py
+def celsius_to_fahrenheit(c):
+    return c * 9/5 + 32
+
+def fahrenheit_to_celsius(f):
+    return (f - 32) * 5/9
+
+if __name__ == "__main__":
+    # This only runs when executed directly
+    temp = float(input("Enter Celsius: "))
+    print(f"{temp}C = {celsius_to_fahrenheit(temp)}F")
+```
+
+- Run as script: `python converter.py` -- executes the `if` block
+- Import as module: `import converter` -- skips the `if` block
+
+---
+
+## pip Package Manager
+
+`pip` installs third-party packages from the Python Package Index (PyPI):
+
+```bash
+# Install a package
+pip install requests
+
+# Install a specific version
+pip install requests==2.28.0
+
+# Upgrade a package
+pip install --upgrade requests
+
+# Uninstall
+pip uninstall requests
+
+# List installed packages
+pip list
+
+# Show package info
+pip show requests
+```
+
+Over 400,000 packages are available on PyPI!
+
+---
+
+## Virtual Environments
+
+Isolate project dependencies with `venv`:
+
+```bash
+# Create a virtual environment
+python -m venv myproject_env
+
+# Activate it
+# Linux/Mac:
+source myproject_env/bin/activate
+# Windows:
+myproject_env\Scripts\activate
+
+# Install packages (only in this env)
+pip install flask requests
+
+# Deactivate when done
+deactivate
+```
+
+**Why?** Different projects may need different versions of the same package. Virtual environments keep them separate.
+
+---
+
+## requirements.txt
+
+Track your project's dependencies:
+
+```bash
+# Generate from current environment
+pip freeze > requirements.txt
+
+# Install all dependencies
+pip install -r requirements.txt
+```
+
+```
+# requirements.txt
+flask==2.3.2
+requests>=2.28.0
+numpy~=1.24.0
+pytest>=7.0,<8.0
+```
+
+| Specifier | Meaning |
+|-----------|---------|
+| `==2.3.2` | Exact version |
+| `>=2.28.0` | Minimum version |
+| `~=1.24.0` | Compatible release (1.24.x) |
+| `>=7.0,<8.0` | Version range |
+
+---
+
+## Summary
+
+- **Modules** = Python files you can import
+- **Packages** = directories of modules with `__init__.py`
+- **Standard library** = rich set of built-in modules
+- **`if __name__ == "__main__"`** = script vs. module guard
+- **pip** = package manager for third-party code
+- **venv** = isolated environments per project
+- **requirements.txt** = reproducible dependency lists

@@ -1,0 +1,314 @@
+---
+marp: true
+theme: default
+paginate: true
+---
+
+# Operators and Expressions
+
+### Mastering computation in Python
+
+Operators are special symbols that perform operations on values and variables. Let's explore them all!
+
+---
+
+## Arithmetic Operators
+
+Python supports seven arithmetic operators:
+
+| Operator | Name | Example | Result |
+|----------|------|---------|--------|
+| `+` | Addition | `7 + 3` | `10` |
+| `-` | Subtraction | `7 - 3` | `4` |
+| `*` | Multiplication | `7 * 3` | `21` |
+| `/` | Division | `7 / 3` | `2.333...` |
+| `//` | Floor Division | `7 // 3` | `2` |
+| `%` | Modulo | `7 % 3` | `1` |
+| `**` | Exponentiation | `7 ** 3` | `343` |
+
+```python
+# Division ALWAYS returns a float
+print(10 / 5)     # 2.0  (not 2!)
+
+# Floor division truncates toward negative infinity
+print(7 // 2)     # 3
+print(-7 // 2)    # -4  (not -3!)
+
+# Modulo finds the remainder
+print(17 % 5)     # 2
+```
+
+---
+
+## Assignment Operators
+
+Assignment operators combine an operation with assignment:
+
+```python
+x = 10       # Simple assignment
+
+x += 5       # x = x + 5  ->  15
+x -= 3       # x = x - 3  ->  12
+x *= 2       # x = x * 2  ->  24
+x /= 4       # x = x / 4  ->  6.0
+x //= 2      # x = x // 2 ->  3.0
+x %= 2       # x = x % 2  ->  1.0
+x **= 3      # x = x ** 3 ->  1.0
+```
+
+### String Assignment Operators
+```python
+greeting = "Hello"
+greeting += ", World!"    # "Hello, World!"
+```
+
+> **Note**: There is no `++` or `--` in Python. Use `x += 1` and `x -= 1` instead.
+
+---
+
+## Comparison Operators
+
+Comparison operators return `True` or `False`:
+
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| `==` | Equal | `5 == 5` -> `True` |
+| `!=` | Not equal | `5 != 3` -> `True` |
+| `<` | Less than | `3 < 5` -> `True` |
+| `>` | Greater than | `5 > 3` -> `True` |
+| `<=` | Less or equal | `5 <= 5` -> `True` |
+| `>=` | Greater or equal | `3 >= 5` -> `False` |
+
+```python
+# Chained comparisons (unique to Python!)
+x = 5
+print(1 < x < 10)     # True  (equivalent to: 1 < x and x < 10)
+print(1 < x < 3)      # False
+
+# String comparison (lexicographic)
+print("apple" < "banana")   # True
+print("A" < "a")            # True (uppercase < lowercase in ASCII)
+```
+
+---
+
+## Logical Operators
+
+Combine boolean expressions with `and`, `or`, and `not`:
+
+```python
+age = 25
+has_license = True
+
+# and - both must be True
+can_drive = age >= 16 and has_license    # True
+
+# or - at least one must be True
+is_weekend = False
+is_holiday = True
+day_off = is_weekend or is_holiday       # True
+
+# not - inverts the boolean
+is_working = not day_off                 # False
+```
+
+### Short-Circuit Evaluation
+Python stops evaluating as soon as the result is determined:
+
+```python
+# 'and' stops at the first False
+result = False and expensive_function()  # expensive_function() never runs!
+
+# 'or' stops at the first True
+result = True or expensive_function()    # expensive_function() never runs!
+```
+
+---
+
+## Identity and Membership
+
+### Identity Operators: `is`, `is not`
+Test if two variables refer to the **same object** in memory:
+
+```python
+a = [1, 2, 3]
+b = [1, 2, 3]
+c = a
+
+print(a == b)      # True  (same value)
+print(a is b)      # False (different objects)
+print(a is c)      # True  (same object)
+
+# Always use 'is' for None checks
+x = None
+print(x is None)   # True  (correct way!)
+```
+
+### Membership Operators: `in`, `not in`
+Test if a value exists in a sequence:
+
+```python
+fruits = ["apple", "banana", "cherry"]
+print("apple" in fruits)        # True
+print("grape" not in fruits)    # True
+
+name = "Python"
+print("th" in name)             # True
+```
+
+---
+
+## Bitwise Operators
+
+Bitwise operators work on individual bits of integers:
+
+| Operator | Name | Example | Result |
+|----------|------|---------|--------|
+| `&` | AND | `5 & 3` | `1` |
+| `\|` | OR | `5 \| 3` | `7` |
+| `^` | XOR | `5 ^ 3` | `6` |
+| `~` | NOT | `~5` | `-6` |
+| `<<` | Left shift | `5 << 1` | `10` |
+| `>>` | Right shift | `5 >> 1` | `2` |
+
+```python
+# Practical use: checking if a number is even/odd
+n = 7
+is_odd = n & 1       # 1 (True) if odd, 0 (False) if even
+
+# Left shift = multiply by 2
+print(3 << 2)        # 12  (3 * 4)
+
+# Right shift = integer divide by 2
+print(20 >> 1)       # 10  (20 / 2)
+```
+
+> Bitwise operators are rarely needed in everyday Python, but useful for flags, permissions, and low-level operations.
+
+---
+
+## String Operations
+
+Strings support several operator-based operations:
+
+```python
+# Concatenation (+)
+first = "Hello"
+last = "World"
+full = first + " " + last    # "Hello World"
+
+# Repetition (*)
+line = "-" * 30               # "------------------------------"
+banner = ("! " * 5).strip()   # "! ! ! ! !"
+
+# Membership (in)
+email = "user@example.com"
+has_at = "@" in email         # True
+
+# Length (len)
+password = "secret123"
+print(len(password))          # 9
+```
+
+### Common String Patterns
+```python
+# Building a separator
+print("=" * 40)
+
+# Centering text
+title = "Python"
+print(f"{title:=^40}")  # "=================Python================="
+
+# Checking string content
+text = "Hello123"
+print(text.isalpha())   # False (contains digits)
+print(text.isalnum())   # True  (letters and digits)
+```
+
+---
+
+## Operator Precedence
+
+When multiple operators appear in one expression, Python evaluates them in this order (highest to lowest):
+
+| Priority | Operator(s) | Description |
+|----------|-------------|-------------|
+| 1 | `()` | Parentheses |
+| 2 | `**` | Exponentiation |
+| 3 | `+x`, `-x`, `~x` | Unary operators |
+| 4 | `*`, `/`, `//`, `%` | Multiplication family |
+| 5 | `+`, `-` | Addition, subtraction |
+| 6 | `<<`, `>>` | Bitwise shifts |
+| 7 | `&` | Bitwise AND |
+| 8 | `^` | Bitwise XOR |
+| 9 | `\|` | Bitwise OR |
+| 10 | `==`, `!=`, `<`, `>`, `<=`, `>=`, `is`, `in` | Comparisons |
+| 11 | `not` | Logical NOT |
+| 12 | `and` | Logical AND |
+| 13 | `or` | Logical OR |
+
+```python
+# Without parentheses:
+result = 2 + 3 * 4 ** 2     # 2 + 3 * 16 = 2 + 48 = 50
+
+# Use parentheses for clarity!
+result = 2 + (3 * (4 ** 2)) # Same: 50
+```
+
+---
+
+## Expressions vs Statements
+
+### Expression
+Produces a value -- can be used inside other expressions:
+```python
+# These are expressions:
+x + y
+len("hello")
+3 > 2
+f"Hello, {name}"
+```
+
+### Statement
+Performs an action -- cannot be used inside expressions:
+```python
+# These are statements:
+x = 42                # assignment
+if x > 0: print(x)   # if statement
+import math           # import statement
+```
+
+### The Walrus Operator `:=` (Python 3.8+)
+Turns an assignment into an expression:
+```python
+# Without walrus:
+n = len("hello")
+if n > 3:
+    print(f"Long string: {n} chars")
+
+# With walrus:
+if (n := len("hello")) > 3:
+    print(f"Long string: {n} chars")
+```
+
+---
+
+## Summary
+
+| Category | Operators |
+|----------|-----------|
+| **Arithmetic** | `+  -  *  /  //  %  **` |
+| **Assignment** | `=  +=  -=  *=  /=  //=  %=  **=` |
+| **Comparison** | `==  !=  <  >  <=  >=` |
+| **Logical** | `and  or  not` |
+| **Identity** | `is  is not` |
+| **Membership** | `in  not in` |
+| **Bitwise** | `&  |  ^  ~  <<  >>` |
+| **Walrus** | `:=` |
+
+### Golden Rules
+1. **Use parentheses** when precedence is not obvious
+2. **Never use `==` for None** -- use `is None`
+3. Understand **short-circuit evaluation** for `and`/`or`
+4. **Division always returns float** -- use `//` for integers
+5. The **walrus operator** is powerful but use it sparingly

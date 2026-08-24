@@ -1,0 +1,244 @@
+---
+marp: true
+theme: default
+paginate: true
+---
+
+# Control Flow
+## Making Decisions in Python
+
+Learn how to control the flow of your programs with conditional statements.
+
+---
+
+# The `if` Statement
+
+The simplest form of decision-making:
+
+```python
+temperature = 35
+
+if temperature > 30:
+    print("It's hot outside!")
+    print("Stay hydrated!")
+```
+
+- The condition must evaluate to `True` or `False`
+- The indented block runs only if the condition is `True`
+- Indentation (4 spaces) defines the block
+
+---
+
+# `if/else` — Two Paths
+
+Choose between two alternatives:
+
+```python
+age = 16
+
+if age >= 18:
+    print("You can vote!")
+else:
+    print("Too young to vote.")
+```
+
+- Exactly one branch will execute
+- `else` has no condition — it catches everything the `if` didn't
+
+---
+
+# `if/elif/else` — Multiple Paths
+
+Handle several conditions in sequence:
+
+```python
+score = 85
+
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
+elif score >= 70:
+    grade = "C"
+else:
+    grade = "F"
+
+print(f"Grade: {grade}")  # Grade: B
+```
+
+- Conditions are checked **top to bottom**
+- First match wins — remaining conditions are skipped
+
+---
+
+# Indentation Matters!
+
+Python uses indentation to define code blocks:
+
+```python
+# Correct
+if True:
+    print("Inside the if block")
+    print("Still inside")
+print("Outside the block")
+
+# IndentationError!
+if True:
+print("This will cause an error")
+```
+
+- Use **4 spaces** (PEP 8 standard)
+- Be consistent — don't mix tabs and spaces
+- Your editor should handle this automatically
+
+---
+
+# Truthy and Falsy Values
+
+Python treats many values as `True` or `False` in conditions:
+
+| Falsy | Truthy |
+|-------|--------|
+| `False` | `True` |
+| `0`, `0.0` | Any non-zero number |
+| `""` (empty string) | Any non-empty string |
+| `[]`, `()`, `{}` | Non-empty collections |
+| `None` | Almost everything else |
+
+```python
+name = ""
+if name:
+    print(f"Hello, {name}")
+else:
+    print("Name is empty!")
+```
+
+---
+
+# Nested Conditionals
+
+Conditions inside conditions:
+
+```python
+age = 25
+has_license = True
+
+if age >= 16:
+    if has_license:
+        print("You can drive!")
+    else:
+        print("Get your license first.")
+else:
+    print("Too young to drive.")
+```
+
+> **Tip:** Deeply nested code is hard to read.
+> Consider using `and`/`or` to flatten conditions.
+
+---
+
+# Ternary Expressions
+
+A compact one-line conditional:
+
+```python
+age = 20
+status = "adult" if age >= 18 else "minor"
+print(status)  # adult
+
+# Useful in f-strings
+print(f"You are {'old enough' if age >= 18 else 'too young'}")
+```
+
+**Syntax:** `value_if_true if condition else value_if_false`
+
+- Great for simple assignments
+- Avoid for complex logic — readability matters!
+
+---
+
+# `match/case` (Python 3.10+)
+
+Structural pattern matching:
+
+```python
+command = "quit"
+
+match command:
+    case "start":
+        print("Starting...")
+    case "stop":
+        print("Stopping...")
+    case "quit" | "exit":
+        print("Goodbye!")
+    case _:
+        print(f"Unknown: {command}")
+```
+
+- `_` is the wildcard — matches anything
+- Use `|` to combine patterns
+
+---
+
+# Pattern Matching Examples
+
+Match on structure, not just values:
+
+```python
+point = (0, 5)
+
+match point:
+    case (0, 0):
+        print("Origin")
+    case (x, 0):
+        print(f"On x-axis at {x}")
+    case (0, y):
+        print(f"On y-axis at {y}")
+    case (x, y):
+        print(f"Point at ({x}, {y})")
+```
+
+- Variables in patterns **capture** values
+- Patterns can destructure tuples, lists, and more
+
+---
+
+# Guard Clauses
+
+Return early to avoid deep nesting:
+
+```python
+# Instead of deeply nested code:
+def process_order(order):
+    if not order:
+        return "No order provided"
+    if not order.get("items"):
+        return "Order has no items"
+    if order.get("total", 0) <= 0:
+        return "Invalid total"
+
+    # Main logic here (not nested!)
+    return f"Processing {len(order['items'])} items"
+```
+
+- Check error cases first
+- Return/raise early
+- Keep the "happy path" un-indented
+
+---
+
+# Summary
+
+| Concept | Use When |
+|---------|----------|
+| `if` | Single condition check |
+| `if/else` | Two alternatives |
+| `if/elif/else` | Multiple conditions |
+| Ternary | Simple inline choice |
+| `match/case` | Matching patterns/values |
+| Guard clauses | Avoiding deep nesting |
+
+**Key principles:**
+- Conditions are checked top to bottom
+- Indentation defines code blocks
+- Keep it readable — flatten when possible

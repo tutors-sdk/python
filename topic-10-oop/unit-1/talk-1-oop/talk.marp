@@ -1,0 +1,358 @@
+---
+marp: true
+theme: default
+paginate: true
+---
+
+# Object-Oriented Python
+
+### Classes, inheritance, and design principles
+
+---
+
+## What Is OOP?
+
+**Object-Oriented Programming** organizes code around *objects* that combine data and behavior.
+
+**Key concepts:**
+- **Class**: A blueprint for creating objects
+- **Object/Instance**: A specific realization of a class
+- **Attribute**: Data stored in an object
+- **Method**: A function that belongs to an object
+
+```python
+# Real-world analogy:
+# Class = "Dog" (the concept)
+# Object = "Buddy" (a specific dog)
+# Attributes = name, breed, age
+# Methods = bark(), fetch(), sit()
+```
+
+---
+
+## Defining a Class
+
+```python
+class Dog:
+    # Constructor: called when creating a new instance
+    def __init__(self, name, breed, age):
+        self.name = name      # instance attribute
+        self.breed = breed
+        self.age = age
+
+    # Instance method
+    def bark(self):
+        return f"{self.name} says Woof!"
+
+    def describe(self):
+        return f"{self.name} is a {self.age}-year-old {self.breed}"
+
+# Create instances
+buddy = Dog("Buddy", "Golden Retriever", 3)
+max_dog = Dog("Max", "German Shepherd", 5)
+
+print(buddy.bark())       # Buddy says Woof!
+print(max_dog.describe())  # Max is a 5-year-old German Shepherd
+```
+
+---
+
+## Attributes and Methods
+
+```python
+class Circle:
+    # Class attribute (shared by all instances)
+    pi = 3.14159
+
+    def __init__(self, radius):
+        self.radius = radius  # instance attribute
+
+    def area(self):
+        return Circle.pi * self.radius ** 2
+
+    def circumference(self):
+        return 2 * Circle.pi * self.radius
+
+c1 = Circle(5)
+c2 = Circle(10)
+
+print(f"c1 area: {c1.area():.2f}")        # 78.54
+print(f"c2 area: {c2.area():.2f}")        # 314.16
+print(f"Same pi? {c1.pi is c2.pi}")       # True
+```
+
+- **Instance attributes**: unique to each object (`self.radius`)
+- **Class attributes**: shared across all instances (`pi`)
+
+---
+
+## The `self` Parameter
+
+`self` refers to the current instance. Python passes it automatically:
+
+```python
+class Counter:
+    def __init__(self):
+        self.count = 0     # each instance has its own count
+
+    def increment(self):
+        self.count += 1    # modify THIS instance's count
+        return self        # return self for method chaining
+
+    def get(self):
+        return self.count
+
+c = Counter()
+c.increment().increment().increment()  # method chaining
+print(c.get())  # 3
+
+# What Python actually does:
+# c.increment() is the same as Counter.increment(c)
+```
+
+---
+
+## Special (Dunder) Methods
+
+```python
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __str__(self):        # str(obj), print(obj)
+        return f"({self.x}, {self.y})"
+
+    def __repr__(self):       # repr(obj), debugging
+        return f"Point({self.x}, {self.y})"
+
+    def __eq__(self, other):  # obj1 == obj2
+        return self.x == other.x and self.y == other.y
+
+    def __len__(self):        # len(obj)
+        return int((self.x**2 + self.y**2)**0.5)
+
+p = Point(3, 4)
+print(p)            # (3, 4)
+print(repr(p))      # Point(3, 4)
+print(len(p))       # 5
+print(p == Point(3, 4))  # True
+```
+
+---
+
+## Inheritance
+
+A class can inherit attributes and methods from another class:
+
+```python
+class Animal:
+    def __init__(self, name, sound):
+        self.name = name
+        self.sound = sound
+
+    def speak(self):
+        return f"{self.name} says {self.sound}!"
+
+class Dog(Animal):  # Dog inherits from Animal
+    def fetch(self, item):
+        return f"{self.name} fetches the {item}!"
+
+class Cat(Animal):
+    def purr(self):
+        return f"{self.name} purrs..."
+
+dog = Dog("Buddy", "Woof")
+cat = Cat("Whiskers", "Meow")
+
+print(dog.speak())    # Buddy says Woof!  (inherited)
+print(dog.fetch("ball"))  # Buddy fetches the ball!
+print(cat.speak())    # Whiskers says Meow!  (inherited)
+```
+
+---
+
+## Method Overriding
+
+```python
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        return f"{self.name} makes a sound"
+
+class Dog(Animal):
+    def speak(self):     # override parent method
+        return f"{self.name} barks loudly!"
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} meows softly"
+
+# Polymorphism: same method, different behavior
+animals = [Dog("Rex"), Cat("Luna"), Animal("???")]
+for animal in animals:
+    print(animal.speak())
+# Rex barks loudly!
+# Luna meows softly
+# ??? makes a sound
+```
+
+---
+
+## Multiple Inheritance and MRO
+
+```python
+class Flyer:
+    def move(self):
+        return "flies through the air"
+
+class Swimmer:
+    def move(self):
+        return "swims through the water"
+
+class Duck(Flyer, Swimmer):  # multiple inheritance
+    pass
+
+d = Duck()
+print(d.move())  # "flies through the air"
+
+# Method Resolution Order (MRO)
+print(Duck.__mro__)
+# (<class 'Duck'>, <class 'Flyer'>,
+#  <class 'Swimmer'>, <class 'object'>)
+```
+
+Python uses the **C3 linearization** algorithm (left to right, depth first) to determine which method to call.
+
+---
+
+## Properties
+
+```python
+class Temperature:
+    def __init__(self, celsius):
+        self._celsius = celsius   # convention: _ = private
+
+    @property
+    def celsius(self):
+        return self._celsius
+
+    @celsius.setter
+    def celsius(self, value):
+        if value < -273.15:
+            raise ValueError("Below absolute zero!")
+        self._celsius = value
+
+    @property
+    def fahrenheit(self):
+        return self._celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.celsius)      # 100
+print(t.fahrenheit)   # 212.0
+t.celsius = 0
+print(t.fahrenheit)   # 32.0
+# t.celsius = -300    # ValueError!
+```
+
+---
+
+## Class and Static Methods
+
+```python
+class Date:
+    def __init__(self, year, month, day):
+        self.year = year
+        self.month = month
+        self.day = day
+
+    def __str__(self):
+        return f"{self.year}-{self.month:02d}-{self.day:02d}"
+
+    @classmethod
+    def from_string(cls, date_str):
+        """Factory method: create Date from 'YYYY-MM-DD'."""
+        y, m, d = map(int, date_str.split("-"))
+        return cls(y, m, d)
+
+    @staticmethod
+    def is_valid(year, month, day):
+        """Check if a date is valid."""
+        return 1 <= month <= 12 and 1 <= day <= 31
+
+d1 = Date(2024, 7, 15)
+d2 = Date.from_string("2024-12-25")
+print(d1)   # 2024-07-15
+print(d2)   # 2024-12-25
+print(Date.is_valid(2024, 13, 1))  # False
+```
+
+---
+
+## Dataclasses
+
+```python
+from dataclasses import dataclass, field
+
+@dataclass
+class Student:
+    name: str
+    age: int
+    grades: list = field(default_factory=list)
+
+    def average(self):
+        return sum(self.grades) / len(self.grades) if self.grades else 0
+
+# Auto-generates __init__, __repr__, __eq__
+s1 = Student("Alice", 20, [90, 85, 92])
+s2 = Student("Bob", 21)
+
+print(s1)            # Student(name='Alice', age=20, grades=[90, 85, 92])
+print(s1.average())  # 89.0
+print(s1 == s2)      # False (auto __eq__)
+```
+
+Dataclasses reduce boilerplate for classes that primarily hold data.
+
+---
+
+## OOP Principles
+
+| Principle | Description |
+|-----------|-------------|
+| **Encapsulation** | Bundle data + methods; hide internals (`_private`) |
+| **Inheritance** | Child classes inherit from parents |
+| **Polymorphism** | Same interface, different behavior |
+| **Composition** | Build complex objects from simpler ones (has-a) |
+
+```python
+# Composition over inheritance
+class Engine:
+    def start(self):
+        return "Engine started"
+
+class Car:
+    def __init__(self):
+        self.engine = Engine()  # Car HAS-AN Engine
+
+    def start(self):
+        return self.engine.start()
+```
+
+**Favor composition over inheritance** when the relationship is "has-a" rather than "is-a".
+
+---
+
+## Summary
+
+- **Classes** bundle data (attributes) and behavior (methods)
+- **`__init__`** initializes new objects; **`self`** refers to the instance
+- **Dunder methods** (`__str__`, `__eq__`, etc.) customize built-in operations
+- **Inheritance** lets classes share and extend behavior
+- **`super()`** calls parent class methods
+- **Properties** provide controlled attribute access
+- **`@classmethod`** and **`@staticmethod`** for alternative constructors and utilities
+- **`@dataclass`** reduces boilerplate for data-centric classes
+- **Composition** is often preferred over deep inheritance hierarchies

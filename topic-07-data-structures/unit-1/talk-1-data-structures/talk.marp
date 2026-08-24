@@ -1,0 +1,290 @@
+---
+marp: true
+theme: default
+paginate: true
+---
+
+# Python Data Structures
+## Organizing Your Data
+
+Learn to choose and use the right collection for every task.
+
+---
+
+# Overview: Mutable vs. Immutable
+
+| Type | Mutable? | Ordered? | Duplicates? | Syntax |
+|------|----------|----------|-------------|--------|
+| **List** | Yes | Yes | Yes | `[1, 2, 3]` |
+| **Tuple** | No | Yes | Yes | `(1, 2, 3)` |
+| **Dict** | Yes | Yes* | Keys: No | `{"a": 1}` |
+| **Set** | Yes | No | No | `{1, 2, 3}` |
+| **frozenset** | No | No | No | `frozenset()` |
+
+*Dicts maintain insertion order (Python 3.7+)
+
+**Mutable** = can be changed after creation
+**Immutable** = cannot be changed (create a new one instead)
+
+---
+
+# Lists
+
+The most versatile collection. Ordered, mutable, allows duplicates.
+
+```python
+# Creating lists
+fruits = ["apple", "banana", "cherry"]
+numbers = [1, 2, 3, 4, 5]
+mixed = [1, "hello", True, 3.14]
+empty = []
+
+# Indexing (0-based)
+print(fruits[0])    # "apple"
+print(fruits[-1])   # "cherry" (last element)
+
+# Length
+print(len(fruits))  # 3
+```
+
+---
+
+# List Methods
+
+```python
+fruits = ["apple", "banana"]
+
+# Adding elements
+fruits.append("cherry")         # Add to end
+fruits.insert(1, "blueberry")   # Insert at index
+
+# Removing elements
+fruits.remove("banana")         # Remove by value
+last = fruits.pop()             # Remove and return last
+first = fruits.pop(0)           # Remove and return at index
+
+# Other useful methods
+numbers = [3, 1, 4, 1, 5, 9]
+numbers.sort()                  # Sort in place
+numbers.reverse()               # Reverse in place
+count = numbers.count(1)        # Count occurrences
+idx = numbers.index(5)          # Find index of value
+```
+
+---
+
+# List Slicing
+
+Extract sublists with the `[start:stop:step]` syntax:
+
+```python
+nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+print(nums[2:5])     # [2, 3, 4]
+print(nums[:3])      # [0, 1, 2]
+print(nums[7:])      # [7, 8, 9]
+print(nums[::2])     # [0, 2, 4, 6, 8]  (every 2nd)
+print(nums[::-1])    # [9, 8, 7, ...] (reversed)
+print(nums[1:8:3])   # [1, 4, 7]
+
+# Slicing creates a shallow copy
+copy = nums[:]
+```
+
+---
+
+# Tuples
+
+Immutable ordered sequences. Use when data shouldn't change.
+
+```python
+# Creating tuples
+point = (3, 4)
+rgb = (255, 128, 0)
+single = (42,)          # Note the comma!
+empty = ()
+
+# Unpacking
+x, y = point
+print(f"x={x}, y={y}")  # x=3, y=4
+
+# Swap trick
+a, b = 1, 2
+a, b = b, a             # Now a=2, b=1
+
+# Tuples as dict keys (lists can't!)
+locations = {(0, 0): "origin", (1, 0): "east"}
+```
+
+---
+
+# Dictionaries
+
+Key-value pairs. Fast lookups by key.
+
+```python
+# Creating dicts
+student = {"name": "Alice", "age": 20, "grade": "A"}
+empty = {}
+
+# Access
+print(student["name"])        # "Alice"
+print(student.get("gpa", 0))  # 0 (default if missing)
+
+# Modify
+student["age"] = 21           # Update value
+student["gpa"] = 3.8          # Add new key
+
+# Remove
+del student["grade"]
+gpa = student.pop("gpa")     # Remove and return
+
+# Check membership
+print("name" in student)     # True (checks keys)
+```
+
+---
+
+# Dict Methods
+
+```python
+student = {"name": "Alice", "age": 20, "major": "CS"}
+
+# Iteration methods
+print(list(student.keys()))    # ['name', 'age', 'major']
+print(list(student.values()))  # ['Alice', 20, 'CS']
+print(list(student.items()))   # [('name','Alice'), ...]
+
+# Useful patterns
+for key, value in student.items():
+    print(f"  {key}: {value}")
+
+# Merge dicts (Python 3.9+)
+defaults = {"color": "blue", "size": "medium"}
+custom = {"color": "red"}
+result = defaults | custom    # {'color': 'red', 'size': 'medium'}
+```
+
+---
+
+# Dict Comprehensions
+
+```python
+# Square numbers
+squares = {n: n**2 for n in range(1, 6)}
+# {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+
+# Invert a dict (swap keys and values)
+grades = {"Alice": "A", "Bob": "B", "Charlie": "A"}
+by_grade = {}
+for name, grade in grades.items():
+    by_grade.setdefault(grade, []).append(name)
+# {'A': ['Alice', 'Charlie'], 'B': ['Bob']}
+
+# From two lists
+keys = ["name", "age", "city"]
+values = ["Alice", 20, "Dublin"]
+person = dict(zip(keys, values))
+# {'name': 'Alice', 'age': 20, 'city': 'Dublin'}
+```
+
+---
+
+# Sets
+
+Unordered collections of **unique** elements. Great for membership tests and math operations.
+
+```python
+# Creating sets
+colors = {"red", "green", "blue"}
+from_list = set([1, 2, 2, 3, 3, 3])  # {1, 2, 3}
+empty = set()   # NOT {} (that's an empty dict!)
+
+# Add and remove
+colors.add("yellow")
+colors.discard("red")   # No error if missing
+
+# Membership test (very fast!)
+print("green" in colors)  # True
+```
+
+---
+
+# Set Operations
+
+```python
+a = {1, 2, 3, 4, 5}
+b = {4, 5, 6, 7, 8}
+
+# Union (all elements from both)
+print(a | b)       # {1, 2, 3, 4, 5, 6, 7, 8}
+
+# Intersection (common elements)
+print(a & b)       # {4, 5}
+
+# Difference (in a but not b)
+print(a - b)       # {1, 2, 3}
+
+# Symmetric difference (in one but not both)
+print(a ^ b)       # {1, 2, 3, 6, 7, 8}
+
+# Subset / superset
+print({1, 2} <= a)  # True (subset)
+```
+
+---
+
+# Nested Structures
+
+Combine collections for complex data:
+
+```python
+# List of dicts (very common pattern!)
+students = [
+    {"name": "Alice", "scores": [85, 92, 88]},
+    {"name": "Bob", "scores": [76, 84, 91]},
+    {"name": "Charlie", "scores": [92, 88, 95]},
+]
+
+for student in students:
+    avg = sum(student["scores"]) / len(student["scores"])
+    print(f"{student['name']}: {avg:.1f}")
+```
+
+Output:
+```
+Alice: 88.3
+Bob: 83.7
+Charlie: 91.7
+```
+
+---
+
+# Choosing the Right Structure
+
+| Need | Use |
+|------|-----|
+| Ordered collection, may change | **list** |
+| Fixed collection of values | **tuple** |
+| Key-value lookup | **dict** |
+| Unique items, set math | **set** |
+| Group of named fields | **dict** or **namedtuple** |
+| Stack (LIFO) | **list** (`.append()`/`.pop()`) |
+| Immutable set | **frozenset** |
+
+---
+
+# Summary Table
+
+| | List | Tuple | Dict | Set |
+|---|---|---|---|---|
+| **Syntax** | `[]` | `()` | `{k:v}` | `{}` |
+| **Mutable** | Yes | No | Yes | Yes |
+| **Ordered** | Yes | Yes | Yes* | No |
+| **Duplicates** | Yes | Yes | Keys: No | No |
+| **Indexed** | Yes | Yes | By key | No |
+| **Use for** | Collections | Fixed data | Mappings | Uniqueness |
+
+*Dicts maintain insertion order in Python 3.7+
+
+**Tip:** Start with a list. Switch to a dict when you need lookups, a set when you need uniqueness, or a tuple when you need immutability.
