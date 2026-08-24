@@ -1,0 +1,86 @@
+title: Semester 1
+year: 2026
+
+weeks:
+
+  - date: 2026-08-31
+    week: 0
+    topic: Induction
+    assessment: ~
+
+  - date: 2026-09-07
+    week: 1
+    topic: Getting Started with Python
+    assessment: ~
+
+  - date: 2026-09-14
+    week: 2
+    topic: Variables and Data Types
+    assessment: ~
+
+  - date: 2026-09-21
+    week: 3
+    topic: Operators and Expressions
+    assessment: ~
+
+  - date: 2026-09-28
+    week: ~
+    topic: Reading Week
+    assessment:
+      name: Assignment 1
+      due: 2026-10-04
+      percentage: 20
+      submission: Online (Moodle)
+
+  - date: 2026-10-05
+    week: 4
+    topic: Control Flow
+    assessment: ~
+
+  - date: 2026-10-12
+    week: 5
+    topic: Loops
+    assessment: ~
+
+  - date: 2026-10-19
+    week: 6
+    topic: Functions
+    assessment: ~
+
+  - date: 2026-10-26
+    week: ~
+    topic: Reading Week
+    assessment:
+      name: Assignment 2
+      due: 2026-11-01
+      percentage: 20
+      submission: Online (Moodle)
+
+  - date: 2026-11-02
+    week: 7
+    topic: Data Structures
+    assessment: ~
+
+  - date: 2026-11-09
+    week: 8
+    topic: File I/O and Error Handling
+    assessment: ~
+
+  - date: 2026-11-16
+    week: 9
+    topic: Modules and Packages
+    assessment: ~
+
+  - date: 2026-11-23
+    week: 10
+    topic: Object-Oriented Programming
+    assessment: ~
+
+  - date: 2026-11-30
+    week: ~
+    topic: Revision
+    assessment:
+      name: End of Semester Project
+      due: 2026-12-12
+      percentage: 60
+      submission: Moodle with possible interview

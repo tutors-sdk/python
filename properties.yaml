@@ -1,3 +1,7 @@
 credits: Python Fundamentals — A Tutors Reference Course
 auth: 0
 labStepsAutoNumber: true
+github: https://github.com/tutors-sdk/python/blob/main
+icon:
+  type: logos:python
+  color: 3776AB
